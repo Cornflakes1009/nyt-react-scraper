@@ -4,6 +4,8 @@ import Search from "./Search";
 import Results from "./Results";
 import API from "../utils/api";
 import "./style.css";
+import Modal from 'react-responsive-modal';
+
 
 class Main extends Component {
 
@@ -12,7 +14,8 @@ class Main extends Component {
     startYear: "",
     endYear: "",
     articles: [],
-    saved: []
+    saved: [],
+    open: false
   };
 
   // When the component mounts, get a list of all saved articles and update this.state.saved
@@ -26,6 +29,7 @@ class Main extends Component {
       .then((res) => {
         this.setState({ saved: res.data });
       });
+
   }
 
   // A helper method for rendering one search results div for each article
@@ -80,6 +84,9 @@ class Main extends Component {
       .then((res) => {
         this.setState({ articles: res.data.response.docs });
       });
+      /////////  modal logic goes here. 
+      this.onOpenModal();
+
   }
 
   // When save article button is clicked, add article to db
@@ -95,6 +102,16 @@ class Main extends Component {
     API.deleteArticle(id)
       .then(this.getSavedArticles());
   }
+
+  // modal functions
+
+  onOpenModal = () => {
+    this.setState({ open: true });
+  };
+
+  onCloseModal = () => {
+    this.setState({ open: false });
+  };
 
   render() {
     return (
@@ -139,6 +156,13 @@ class Main extends Component {
             <br />
           </footer>
         </div>
+        <Modal open={this.state.open} onClose={this.onCloseModal} center>
+          <div className="modal-style">
+            <h2 className="text-center">Sorry, no search results found.</h2>
+            <hr />
+            <h4>Please review your search query and try again.</h4>
+          </div>
+          </Modal>
       </div>
 
     );
