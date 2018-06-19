@@ -83,10 +83,12 @@ class Main extends Component {
     API.searchNYT(this.state.topic, this.state.startYear, this.state.endYear)
       .then((res) => {
         this.setState({ articles: res.data.response.docs });
+        /////////  modal logic goes here. 
+        const numberOfArticles = this.state.articles.length;
+        if(numberOfArticles === 0) {
+          this.onOpenModal();
+        }
       });
-      /////////  modal logic goes here. 
-      this.onOpenModal();
-
   }
 
   // When save article button is clicked, add article to db
